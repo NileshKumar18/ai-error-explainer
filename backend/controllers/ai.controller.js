@@ -18,7 +18,9 @@ export const explainErrorController = async (req, res) => {
         })
     }
     try {
-        const answer = await explainError(extractedError)
+        const rawAnswer = await explainError(extractedError)
+        const cleanedAnswer = rawAnswer.replace(/[\r\n]+/g, '').trim();
+        const answer = JSON.parse(cleanedAnswer);
         return res.status(200).json({
             data: answer,
             success: true

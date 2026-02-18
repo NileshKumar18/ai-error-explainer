@@ -9,28 +9,37 @@ const explainError = async (error) => {
         apiKey: process.env.API_KEY,
     });
     // console.log("API KEY:", process.env.API_KEY);
-    
+
     try {
         const response = await ai.models.generateContent({
             model: "gemini-3-flash-preview",
-            contents: `You are an expert programming assistant that explains coding errors to beginner developers.
+            contents: `
+                                You are an expert programming assistant that explains coding errors to beginner developers.
 
-             Your task:
-                     - Explain the error in simple and clear language.
-                     - Identify the root cause.
-                     - Provide step-by-step fix instructions.
-                     - Include a short learning tip to help avoid this mistake in the future.
+                                Return ONLY valid JSON.
+                                Do NOT include markdown.
+                                Do NOT include explanations outside JSON.
 
-                 Rules:
-                     - Avoid advanced jargon unless necessary.
-                   - Keep explanations concise and structured.
-                    - Format the response using clear sections:
+                                JSON format:
 
-            Explanation:
-                     Root Cause:
-                     Fix Steps:
-                    Learning Tip:
-                     ${error}`,
+                                {
+                                "explanation": "string",
+                                "rootCause": "string",
+                                "fixSteps": ["step1", "step2"],
+                                "learningTip": "string"
+                                }
+
+                                Instructions:
+                                - Explain the error in simple language.
+                                - Identify the root cause.
+                                - Provide step-by-step fixes.
+                                - Include a short learning tip.
+
+                                Error to explain:
+
+                                ${error}
+`
+
         });
         return response.text;
     } catch (err) {
