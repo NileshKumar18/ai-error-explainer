@@ -11,15 +11,19 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-  
-}))
+    origin: [
+        "http://localhost:5173",
+        "https://ai-error-explainer-564jz2gip-nieshkumars-projects.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
+
 
 app.get('/', (req, res) => {
-    
-    
-   return res.send("hello world!")
+
+
+    return res.send("hello world!")
 })
 app.use('/api/ai', aiRotuter)
 
