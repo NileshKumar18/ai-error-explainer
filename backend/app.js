@@ -12,8 +12,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
     origin: [
-        "http://localhost:5173",
-        "https://ai-error-explainer-564jz2gip-nieshkumars-projects.vercel.app"
+        "https://ai-error-explainer-564jz2gip-nieshkumars-projects.vercel.app",
+                "http://localhost:5173",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
