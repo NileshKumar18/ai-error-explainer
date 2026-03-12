@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 
 
 
-const explainError = async (error , language) => {
+const explainError = async (error, language) => {
     const ai = new GoogleGenAI({
         apiKey: process.env.API_KEY,
     });
@@ -12,36 +12,43 @@ const explainError = async (error , language) => {
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-2.5-flash-preview",
             contents: `
-                                You are an expert programming assistant that explains coding errors to beginner developers.
+        You are a senior software engineer and debugging expert helping developers fix errors quickly and learn from them.
 
-                                and the error message is in ${language} programming language.
+        Language/Framework: ${language}
 
-                                Return ONLY valid JSON.
-                                Do NOT include markdown.
-                                Do NOT include explanations outside JSON.
+        Error Message:
+        ${error}
 
-                                JSON format:
+        Code Context (where the error occurred):
+        ${code || "Not provided"}
 
-                                {
-                                "explanation": "string",
-                                "rootCause": "string",
-                                "fixSteps": ["step1", "step2"],
-                                "learningTip": "string"
-                                }
+        Return ONLY valid JSON. No markdown. No extra text outside JSON.
 
-                                Instructions:
-                                - Explain the error in simple language.
-                                - Identify the root cause.
-                                - Provide step-by-step fixes.
-                                - Include a short learning tip.
+        {
+            "errorType": "string (e.g. TypeError, SyntaxError, RuntimeError)",
+            "severity": "string (critical | warning | info)",
+            "explanation": "string (simple 2-3 sentence explanation for beginners)",
+            "rootCause": "string (technical reason why this error occurred)",
+            "fixSteps": [
+                {
+                    "step": "string (what to do)",
+                    "code": "string (actual code example for this step, empty string if not applicable)"
+                }
+            ],
+            "correctedCode": "string (the full corrected version of the user's code if code was provided, otherwise empty string)",
+            "commonMistakes": ["string (other common mistakes related to this error)"],
+            "learningTip": "string (one key concept to learn to avoid this in future)",
+            "relatedErrors": ["string (similar errors they might encounter)"]
+        }
 
-                                Error to explain:
-
-                                ${error}
-`
-
+        Rules:
+        - Be specific to the actual code provided, not generic
+        - correctedCode must be the actual fixed version of their code
+        - Keep explanation beginner friendly but fixSteps can be technical
+        - If no code is provided, make fixSteps as specific as possible to the error
+    `
         });
         return response.text;
     } catch (err) {
