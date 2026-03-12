@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 
 
 
-const explainError = async (error) => {
+const explainError = async (error , language) => {
     const ai = new GoogleGenAI({
         apiKey: process.env.API_KEY,
     });
@@ -15,6 +15,8 @@ const explainError = async (error) => {
             model: "gemini-3-flash-preview",
             contents: `
                                 You are an expert programming assistant that explains coding errors to beginner developers.
+
+                                and the error message is in ${language} programming language.
 
                                 Return ONLY valid JSON.
                                 Do NOT include markdown.

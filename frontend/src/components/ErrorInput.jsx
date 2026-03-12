@@ -7,6 +7,10 @@ import toast from 'react-hot-toast'
 const ErrorInput = ({ setResponse }) => {
     const [errorText, setErrorText] = useState('')
     const [loading, setLoading] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [selectedLanguage, setSelectedLanguage] = useState("")
+    const [language, setLanguage] = useState("Select language")
+    const languages = ["Python", "Java", "Java script", "C++", "C", "C#", "Node js", "Express", "Swift", "Kotlin", "Ruby", "Go", "PHP", "Rust", "Dart", "Flutter", "React", "Angular", "Vue", "Other"]
 
     const handleExplainError = async (errorText) => {
         if (!errorText.trim()) {
@@ -17,7 +21,7 @@ const ErrorInput = ({ setResponse }) => {
         setLoading(true)
 
         try {
-            const response = await toast.promise(explainError(errorText), {
+            const response = await toast.promise(explainError(errorText , language), {
                 loading: 'Analyzing error...',
                 success: "Explanation ready 🚀",
                 error: "Something went wrong ❌"
@@ -26,7 +30,7 @@ const ErrorInput = ({ setResponse }) => {
 
             setResponse(response.data)
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
             console.error(error)
         }
@@ -39,9 +43,39 @@ const ErrorInput = ({ setResponse }) => {
     return (
         <div className="bg-white rounded-2xl p-6 shadow-lg">
 
-            <h2 className="text-xl font-semibold mb-4">
-                Paste Error
-            </h2>
+            <div className="  w-full flex justify-between px-4 py-1 rounded-full mb-4">
+                <h2 className="text-xl font-semibold mb-4">
+                    Paste Error 
+                </h2>
+                <div className="relative inline-block">
+
+                    <button
+                        onClick={() => setOpen(!open)}
+                        className="px-4 min-w-6 py-2 bg-linear-to-b from-cyan-200 via-violet-400 to-purple-500 text-white rounded-2xl"
+                    >
+                        {language}
+                    </button>
+
+                    {open && (
+                        <div className="absolute mt-2 w-40 max-h-[50vh] overflow-y-auto bg-white border rounded shadow">
+                            {languages.map((lang) => (
+                                <div
+                                    key={lang}
+                                    onClick={() => {
+                                        setLanguage(lang)
+                                        setOpen(false)
+                                    }}
+                                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                                >
+                                    {lang}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                </div>
+            </div>
+
 
             <textarea
                 value={errorText}

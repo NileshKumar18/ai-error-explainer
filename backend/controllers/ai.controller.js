@@ -6,8 +6,8 @@ import { extractError } from "../utils/extractError.js";
 
 
 export const explainErrorController = async (req, res) => {
-    const { error } = req.body;
-    console.log(error);
+    const { error , language } = req.body;
+    console.log(language);
 
     const extractedError = extractError(error);
 
@@ -18,7 +18,7 @@ export const explainErrorController = async (req, res) => {
         })
     }
     try {
-        const rawAnswer = await explainError(extractedError)
+        const rawAnswer = await explainError(extractedError , language)
         const cleanedAnswer = rawAnswer.replace(/[\r\n]+/g, '').trim();
         const answer = JSON.parse(cleanedAnswer);
         return res.status(200).json({
