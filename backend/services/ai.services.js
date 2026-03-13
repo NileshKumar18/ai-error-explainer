@@ -5,14 +5,15 @@ import { GoogleGenAI } from "@google/genai";
 
 
 const explainError = async (error, language) => {
-    const models = await ai.models.list();
-    console.log("Available models:", models);
+
     const ai = new GoogleGenAI({
         apiKey: process.env.API_KEY,
     });
     // console.log("API KEY:", process.env.API_KEY);
-
+    const models = await ai.models.list();
+    console.log("Available models:", models);
     try {
+
         const response = await ai.models.generateContent({
             model: "gemini-1.5-flash",
             contents: `
