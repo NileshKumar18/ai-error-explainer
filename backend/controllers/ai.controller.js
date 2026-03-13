@@ -42,6 +42,8 @@ export const explainErrorController = async (req, res) => {
             success: true
         })
     } catch (err) {
+        console.log("AI error" , err);
+        
         return res.status(500).json({
             message: "error in communicating with open ai",
             success: false
