@@ -26,6 +26,7 @@ export const explainErrorController = async (req, res) => {
     try {
         const rawAnswer = await explainError(extractedError , language)
         const cleanedAnswer = rawAnswer.replace(/[\r\n]+/g, '').trim();
+        log("the raw answer is" , rawAnswer);
         const answer = JSON.parse(cleanedAnswer);
         console.log("the answer is" , answer);
 

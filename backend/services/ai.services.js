@@ -50,6 +50,8 @@ const explainError = async (error, language) => {
         - If no code is provided, make fixSteps as specific as possible to the error
     `
         });
+        console.log(response.text);
+        
         return response.text;
     } catch (err) {
         throw new Error("Failed to generate explanation for error: " + err.message);
