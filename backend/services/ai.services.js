@@ -10,8 +10,8 @@ const explainError = async (error, language) => {
         apiKey: process.env.API_KEY,
     });
     // console.log("API KEY:", process.env.API_KEY);
-    const models = await ai.models.list();
-    console.log("Available models:", models);
+    // const models = await ai.models.list();
+    // console.log("Available models:", models);
     try {
 
         const response = await ai.models.generateContent({
@@ -55,7 +55,7 @@ const explainError = async (error, language) => {
         - If no code is provided, make fixSteps as specific as possible to the error
     `
         });
-        console.log(response.text);
+        // console.log(response.text);
 
         return response.text;
     } catch (err) {
