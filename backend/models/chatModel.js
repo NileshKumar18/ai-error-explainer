@@ -6,7 +6,7 @@ const chatSchema = new mongoose.Schema({
 
     },
     errorText: String,
-    errorExplanation: String,
+    errorExplanation:  mongoose.Schema.Types.Mixed,
     createdAt: {
         type: Date,
         default: Date.now
