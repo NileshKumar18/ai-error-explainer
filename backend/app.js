@@ -4,27 +4,15 @@ import dotenv from "dotenv"
 dotenv.config({ path: "./.env" });
 import cors from "cors"
 import express from "express"
-import aiRotuter from './routes/aiRouter.js'
+import aiRotuter from './routes/aiRouter.js' 
+import connect from "./utils/connection.js"
 
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const app = express()
-app.use(cors({
-    origin: [
-        "https://ai-error-explainer.vercel.app",
-                "http://localhost:5173",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-}));
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
-
-app.get('/', (req, res) => {
-
-
-    return res.send("hello world!")
-})
+connect()
 app.use('/api/ai', aiRotuter)
 
 app.listen(3000, () => {
