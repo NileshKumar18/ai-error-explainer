@@ -1,4 +1,8 @@
 export const extractError = (error) => {
+    console.log("Error before extraction:", error);
+    if (!error || typeof error !== "string") {
+        return null;
+    }
     const errorPatterns = [
         /(TypeError:.*)/gis,
         /(ReferenceError:.*)/gis,

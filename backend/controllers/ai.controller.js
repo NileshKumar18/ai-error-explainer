@@ -15,7 +15,7 @@ export const explainErrorController = async (req, res) => {
     const extractedError = extractError(error);
     const title = generateTitle(error);
     console.log("The title is" , title);
-    
+    console.log("the extracted error is" , extractedError);
 
     if (!extractedError) {
         return res.status(400).json({
