@@ -5,6 +5,8 @@ import { GoogleGenAI } from "@google/genai";
 
 
 const explainError = async (error, language) => {
+    const models = await ai.models.list();
+    console.log("Available models:", models);
     const ai = new GoogleGenAI({
         apiKey: process.env.API_KEY,
     });
