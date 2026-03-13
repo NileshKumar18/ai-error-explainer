@@ -12,7 +12,7 @@ const explainError = async (error, language) => {
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash-preview",
+            model: "gemini-1.5-flash",
             contents: `
         You are a senior software engineer and debugging expert helping developers fix errors quickly and learn from them.
 
