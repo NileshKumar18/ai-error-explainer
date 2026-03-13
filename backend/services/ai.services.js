@@ -22,7 +22,9 @@ const explainError = async (error, language) => {
         ${error}
 
         Code Context (where the error occurred):
-        ${code || "Not provided"}
+      Not provided
+
+        Please provide a detailed explanation of this error in the following JSON format:
 
         Return ONLY valid JSON. No markdown. No extra text outside JSON.
 
@@ -51,7 +53,7 @@ const explainError = async (error, language) => {
     `
         });
         console.log(response.text);
-        
+
         return response.text;
     } catch (err) {
         throw new Error("Failed to generate explanation for error: " + err.message);
