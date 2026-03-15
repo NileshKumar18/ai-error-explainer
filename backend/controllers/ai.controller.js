@@ -26,16 +26,16 @@ export const explainErrorController = async (req, res) => {
     try {
         const rawAnswer = await explainError(extractedError , language)
         const cleanedAnswer = rawAnswer.replace(/[\r\n]+/g, '').trim();
-    //    console.log("the raw answer is" , rawAnswer);
+       console.log("the raw answer is" , rawAnswer);
         const answer = JSON.parse(cleanedAnswer);
-        // console.log("the answer is" , answer);
+        console.log("the answer is" , answer);
 
-        const newExplain = await Chat.create({
-            title:title,
-            errorText:error,
-            errorExplanation:answer
-        })
-        console.log("the new explain is" , newExplain);
+        // const newExplain = await Chat.create({
+        //     title:title,
+        //     errorText:error,
+        //     errorExplanation:answer
+        // })
+        // console.log("the new explain is" , newExplain);
         
         return res.status(200).json({
             data: answer,
