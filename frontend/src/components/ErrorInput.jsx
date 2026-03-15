@@ -4,7 +4,9 @@ import { explainError } from '../services/api.services.js'
 import toast from 'react-hot-toast'
 
 
-const ErrorInput = ({ setResponse }) => {
+const ErrorInput = ({ setResponse , currentChat  }) => {
+    console.log('Current chat fromt the ErrorInput' , currentChat);
+    
     const [errorText, setErrorText] = useState('')
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
@@ -97,7 +99,7 @@ const ErrorInput = ({ setResponse }) => {
                     </svg>
                 </div>
                 <textarea
-                    value={errorText}
+                    value={errorText }
                     onChange={(e) => setErrorText(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {

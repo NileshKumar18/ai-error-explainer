@@ -1,6 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { getChatHiostory } from '../services/api.services'
 
-const Sidebar = ({ history, onSelectHistory, onClearHistory, isOpen, setIsOpen }) => {
+
+const Sidebar = ({ history, onSelectHistory, onClearHistory, isOpen, setIsOpen, response }) => {
+  const [chatHistory, setChatHistory] = useState([]);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const titles = await getChatHiostory();
+
+      // console.log(titles?.data);
+
+      setChatHistory(titles.data);
+      // console.log(chatHistory);
+
+    }
+    fetchHistory()
+  }, [])
+ 
+
+ 
 
   const formatTime = (timestamp) => {
     if (!timestamp) return 'just now'
@@ -22,7 +41,7 @@ const Sidebar = ({ history, onSelectHistory, onClearHistory, isOpen, setIsOpen }
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setIsOpen(false)}
         ></div>
@@ -42,23 +61,23 @@ const Sidebar = ({ history, onSelectHistory, onClearHistory, isOpen, setIsOpen }
               </div>
               <h3 className="text-lg font-bold text-white">History</h3>
             </div>
+
             <button
               onClick={() => setIsOpen(false)}
-              className="md:hidden p-1 hover:bg-gray-800 rounded-lg transition-colors"
-            >
+              className=" p-1 hover:bg-gray-800 rounded-lg transition-colors">
               <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
           <p className="text-xs text-gray-500">
-            {history.length} {history.length === 1 ? 'error' : 'errors'} analyzed
+            {chatHistory.length} {chatHistory.length === 1 ? 'error' : 'errors'} analyzed
           </p>
         </div>
 
         {/* History List */}
         <div className="flex-1 overflow-y-auto">
-          {history.length === 0 ? (
+          {chatHistory.length === 0 ? (
             <div className="p-6 h-full flex flex-col items-center justify-center text-center">
               <div className="p-3 bg-gray-800 rounded-full mb-4">
                 <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,11 +89,12 @@ const Sidebar = ({ history, onSelectHistory, onClearHistory, isOpen, setIsOpen }
             </div>
           ) : (
             <div className="p-4 space-y-2">
-              {history.map((item, index) => (
+              {chatHistory.map((chat) => (
                 <button
-                  key={index}
+                  key={chat._id}
                   onClick={() => {
-                    onSelectHistory(item)
+                    
+                    onSelectHistory(chat)
                     setIsOpen(false)
                   }}
                   className="w-full text-left p-3 rounded-lg bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-200 group"
@@ -87,19 +107,19 @@ const Sidebar = ({ history, onSelectHistory, onClearHistory, isOpen, setIsOpen }
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-semibold text-gray-300 truncate group-hover:text-cyan-400 transition-colors">
-                        {item.language}
+                        {chat.title}
                       </p>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-400 line-clamp-2 pl-6 mb-2 leading-relaxed">
-                    {truncateError(item.error, 60)}
+                  {/* <p className="text-xs text-gray-400 line-clamp-2 pl-6 mb-2 leading-relaxed">
+                    {truncateError(chat.error, 60)}
                   </p>
                   <p className="text-xs text-gray-600 pl-6 flex items-center gap-1">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    {formatTime(item.timestamp)}
-                  </p>
+                    {formatTime(chat.timestamp)}
+                  </p> */}
                 </button>
               ))}
             </div>

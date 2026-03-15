@@ -1,8 +1,12 @@
 import React from 'react'
 
-const ResponseDisplay = ({ response }) => {
+const ResponseDisplay = ({ response, currentChat }) => {
+  console.log("Current chat from the responseDisplay", currentChat.errorExplanation);
+  const aiResponse = response?.errorExplanation || currentChat?.errorExplanation;
+  console.log("Ai res", aiResponse);
 
-  if (!response) {
+
+  if (!response && !currentChat) {
     return (
       <div className="bg-gray-900 rounded-2xl p-8 shadow-2xl border border-gray-800 flex flex-col items-center justify-center h-full min-h-96">
         <div className="text-center">
@@ -17,7 +21,7 @@ const ResponseDisplay = ({ response }) => {
       </div>
     )
   }
-  
+
   return (
     <div className="bg-gray-900 rounded-2xl p-8 shadow-2xl border border-gray-800 hover:border-gray-700 transition-all duration-300 backdrop-blur-sm">
 
@@ -34,7 +38,7 @@ const ResponseDisplay = ({ response }) => {
       </div>
 
       <div className="h-96 overflow-y-auto text-gray-300 space-y-6 pr-3">
-        
+
         {/* Explanation Section */}
         <div className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/50 hover:border-gray-600/50 transition-colors">
           <div className="flex items-start gap-3 mb-3">
@@ -45,8 +49,12 @@ const ResponseDisplay = ({ response }) => {
             </div>
             <h3 className="font-bold text-blue-400 text-lg">What Happened</h3>
           </div>
+
           <p className="leading-relaxed text-gray-200 ml-9">
-            {response.explanation || "AI response will appear here..."}
+
+
+            {aiResponse?.explanation || "AI response will appear here..."}
+
           </p>
         </div>
 
@@ -61,7 +69,7 @@ const ResponseDisplay = ({ response }) => {
             <h3 className="font-bold text-red-400 text-lg">Root Cause</h3>
           </div>
           <p className="text-gray-200 ml-9 leading-relaxed">
-            {response.rootCause || "AI response will appear here..."}
+            {response.errorExplanation?.rootCause || "AI response will appear here..."}
           </p>
         </div>
 
@@ -76,13 +84,13 @@ const ResponseDisplay = ({ response }) => {
             <h3 className="font-bold text-cyan-400 text-lg">How to Fix</h3>
           </div>
           <div className="space-y-2 ml-9">
-            {response.fixSteps && response.fixSteps.length > 0 ? (
-              response.fixSteps.map((step, index) => (
+            {response.errorExplanation?.fixSteps && response.errorExplanation.fixSteps.length > 0 ? (
+              response.errorExplanation.fixSteps.map((step, index) => (
                 <div key={index} className="flex gap-3 group">
                   <div className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold text-sm flex-shrink-0 group-hover:bg-cyan-500/30 transition-colors">
                     {index + 1}
                   </div>
-                  <p className="text-gray-200 leading-relaxed pt-0.5">{step}</p>
+                  <p className="text-gray-200 leading-relaxed pt-0.5">{step.step}</p>
                 </div>
               ))
             ) : (
@@ -102,7 +110,7 @@ const ResponseDisplay = ({ response }) => {
             <h3 className="font-bold text-purple-300 text-lg">💡 Learning Tip</h3>
           </div>
           <p className="text-gray-200 ml-9 leading-relaxed italic">
-            {response.learningTip || "AI response will appear here..."}
+            {response.errorExplanation?.learningTip || "AI response will appear here..."}
           </p>
         </div>
 

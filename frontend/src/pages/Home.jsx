@@ -8,7 +8,7 @@ const Home = () => {
   const [response, setResponse] = useState(null);
   const [history, setHistory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [currentError, setCurrentError] = useState('');
+  const [currentChat, setCurrentChat] = useState('');
   const [currentLanguage, setCurrentLanguage] = useState('');
 
   // Load history from localStorage on mount
@@ -35,12 +35,14 @@ const Home = () => {
       timestamp: new Date().toISOString(),
     };
     setHistory([newHistoryItem, ...history.slice(0, 49)]); // Keep max 50 items
-    setCurrentError(error);
+    // setCurrentError(error);
     setCurrentLanguage(language);
   };
 
   const selectFromHistory = (item) => {
-    setCurrentError(item.error);
+    console.log(item);
+
+    setCurrentChat(item);
     setCurrentLanguage(item.language);
     // You can add logic here to automatically analyze the selected error
     // if desired
@@ -58,22 +60,23 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      
+
       {/* Fixed Sidebar - Desktop only */}
       <div className="hidden md:fixed md:block md:left-0 md:top-0 md:w-80 md:h-screen md:z-30">
-        <Sidebar 
-          history={history} 
+        <Sidebar
+          history={history}
           onSelectHistory={selectFromHistory}
           onClearHistory={clearHistory}
           isOpen={sidebarOpen}
           setIsOpen={setSidebarOpen}
+          response={response}
         />
       </div>
 
       {/* Mobile Sidebar */}
       <div className="md:hidden">
-        <Sidebar 
-          history={history} 
+        <Sidebar
+          history={history}
           onSelectHistory={selectFromHistory}
           onClearHistory={clearHistory}
           isOpen={sidebarOpen}
@@ -83,12 +86,12 @@ const Home = () => {
 
       {/* Main Content - Adjusted for fixed sidebar on desktop */}
       <div className="md:ml-80 min-h-screen flex flex-col">
-        
+
         {/* Animated Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none md:left-80">
           <div className="absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/3 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-          <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/3 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:50px_50px] opacity-30"></div>
         </div>
 
@@ -125,7 +128,7 @@ const Home = () => {
               <div className="mb-12 mt-8">
                 <div className="text-center mb-12 animate-fade-in">
                   <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                  Smart Error Debugging
+                    Smart Error Debugging
                   </h2>
                   <p className="text-gray-400 text-lg max-w-2xl mx-auto">
                     Paste your error message and get instant explanations, root causes, and fix steps powered by AI
@@ -136,13 +139,13 @@ const Home = () => {
                 <div className="grid md:grid-cols-2 gap-8">
 
                   {/* Left side - Error Input */}
-                  <div className="animate-fade-in" style={{animationDelay: '0.1s'}}>
-                    <ErrorInput setResponse={handleSetResponse} addToHistory={addToHistory} />
+                  <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                    <ErrorInput setResponse={handleSetResponse} currentChat={currentChat} addToHistory={addToHistory} />
                   </div>
 
                   {/* Right side - Response Display */}
-                  <div className="animate-fade-in" style={{animationDelay: '0.2s'}}>
-                    <ResponseDisplay response={response} />
+                  <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                    <ResponseDisplay response={response} currentChat={currentChat} />
                   </div>
 
                 </div>

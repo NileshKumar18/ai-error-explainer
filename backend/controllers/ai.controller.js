@@ -8,14 +8,14 @@ import Chat from "../models/chatModel.js";
 
 
 export const explainErrorController = async (req, res) => {
-    console.log("the request body is" , req.body);  
-    const { error , language } = req.body;
+    console.log("the request body is", req.body);
+    const { error, language } = req.body;
     console.log(language);
 
     const extractedError = extractError(error);
     const title = generateTitle(error);
-    console.log("The title is" , title);
-    console.log("the extracted error is" , extractedError);
+    console.log("The title is", title);
+    console.log("the extracted error is", extractedError);
 
     if (!extractedError) {
         return res.status(400).json({
@@ -24,26 +24,29 @@ export const explainErrorController = async (req, res) => {
         })
     }
     try {
-        const rawAnswer = await explainError(extractedError , language)
-        const cleanedAnswer = rawAnswer.replace(/[\r\n]+/g, '').trim();
-       console.log("the raw answer is" , rawAnswer);
-        const answer = JSON.parse(cleanedAnswer);
-        console.log("the answer is" , answer);
+        const rawAnswer = await explainError(extractedError, language)
+        const cleanedAnswer = rawAnswer.replace(/```json/g, "")
+                                        .replace(/```/g, "")
+                                        .trim();
 
-        // const newExplain = await Chat.create({
-        //     title:title,
-        //     errorText:error,
-        //     errorExplanation:answer
-        // })
-        // console.log("the new explain is" , newExplain);
-        
+        // console.log("the raw answer is", rawAnswer);
+        const answer = JSON.parse(cleanedAnswer);
+        // console.log("the answer is", answer);
+
+        const newExplain = await Chat.create({
+            title: title,
+            errorText: error,
+            errorExplanation: answer
+        })
+        console.log("the new explain is", newExplain);
+
         return res.status(200).json({
-            data: answer,
+            data: newExplain,
             success: true
         })
     } catch (err) {
-        console.log("AI error" , err);
-        
+        console.log("AI error", err);
+
         return res.status(500).json({
             message: "error in communicating with open ai",
             success: false

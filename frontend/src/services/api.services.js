@@ -10,3 +10,12 @@ export const explainError = async (error, language) => {
         throw error
     }
 }
+
+export const getChatHiostory = async () => {
+    try {
+        const res = await api.get('/api/ai/chat-history')
+        return res.data 
+    } catch (error) {
+        throw error;
+    }
+}
