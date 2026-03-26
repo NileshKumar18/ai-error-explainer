@@ -136,7 +136,7 @@ const Home = () => {
                 </div>
 
                 {/* Main Grid */}
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid md:grid-cols-2  gap-8">
 
                   {/* Left side - Error Input */}
                   <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>

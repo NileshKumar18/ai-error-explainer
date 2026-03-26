@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import api from '../services/axios.js'
 import { explainError } from '../services/api.services.js'
 import toast from 'react-hot-toast'
 
 
 const ErrorInput = ({ setResponse , currentChat  }) => {
+
+    useEffect(() => {
+        if(currentChat){
+            setErrorText(currentChat?.errorText);
+        }
+    } , [currentChat])
     console.log('Current chat fromt the ErrorInput' , currentChat);
     
     const [errorText, setErrorText] = useState('')

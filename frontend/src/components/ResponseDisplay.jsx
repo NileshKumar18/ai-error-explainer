@@ -1,12 +1,17 @@
 import React from 'react'
+import { useState } from 'react';
 
 const ResponseDisplay = ({ response, currentChat }) => {
-  console.log("Current chat from the responseDisplay", currentChat.errorExplanation);
+  console.log("Current chat from the responseDisplay", currentChat);
+  console.log("Response from props", response);
+
+  // Get the error explanation from either source
   const aiResponse = response?.errorExplanation || currentChat?.errorExplanation;
-  console.log("Ai res", aiResponse);
 
+  console.log("Ai response extracted:", aiResponse);
 
-  if (!response && !currentChat) {
+  // Show loading state if no data
+  if (!aiResponse) {
     return (
       <div className="bg-gray-900 rounded-2xl p-8 shadow-2xl border border-gray-800 flex flex-col items-center justify-center h-full min-h-96">
         <div className="text-center">
@@ -51,10 +56,7 @@ const ResponseDisplay = ({ response, currentChat }) => {
           </div>
 
           <p className="leading-relaxed text-gray-200 ml-9">
-
-
-            {aiResponse?.explanation || "AI response will appear here..."}
-
+            {aiResponse?.explanation || "No explanation available"}
           </p>
         </div>
 
@@ -69,7 +71,7 @@ const ResponseDisplay = ({ response, currentChat }) => {
             <h3 className="font-bold text-red-400 text-lg">Root Cause</h3>
           </div>
           <p className="text-gray-200 ml-9 leading-relaxed">
-            {response.errorExplanation?.rootCause || "AI response will appear here..."}
+            {aiResponse?.rootCause || "No root cause available"}
           </p>
         </div>
 
@@ -84,17 +86,17 @@ const ResponseDisplay = ({ response, currentChat }) => {
             <h3 className="font-bold text-cyan-400 text-lg">How to Fix</h3>
           </div>
           <div className="space-y-2 ml-9">
-            {response.errorExplanation?.fixSteps && response.errorExplanation.fixSteps.length > 0 ? (
-              response.errorExplanation.fixSteps.map((step, index) => (
+            {aiResponse?.fixSteps && aiResponse.fixSteps.length > 0 ? (
+              aiResponse.fixSteps.map((step, index) => (
                 <div key={index} className="flex gap-3 group">
                   <div className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold text-sm flex-shrink-0 group-hover:bg-cyan-500/30 transition-colors">
                     {index + 1}
                   </div>
-                  <p className="text-gray-200 leading-relaxed pt-0.5">{step.step}</p>
+                  <p className="text-gray-200 leading-relaxed pt-0.5">{step.step || step}</p>
                 </div>
               ))
             ) : (
-              <p className="text-gray-400">AI response will appear here...</p>
+              <p className="text-gray-400">No fix steps available</p>
             )}
           </div>
         </div>
@@ -110,7 +112,7 @@ const ResponseDisplay = ({ response, currentChat }) => {
             <h3 className="font-bold text-purple-300 text-lg">💡 Learning Tip</h3>
           </div>
           <p className="text-gray-200 ml-9 leading-relaxed italic">
-            {response.errorExplanation?.learningTip || "AI response will appear here..."}
+            {aiResponse?.learningTip || "No learning tip available"}
           </p>
         </div>
 

@@ -16,7 +16,7 @@ const Sidebar = ({ history, onSelectHistory, onClearHistory, isOpen, setIsOpen, 
 
     }
     fetchHistory()
-  }, [])
+  }, [response])
  
 
  

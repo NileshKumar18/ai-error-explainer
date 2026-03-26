@@ -4,8 +4,10 @@ import { GoogleGenAI } from "@google/genai";
 
 
 
-const explainError = async (error, language) => {
+const explainError = async (error, language ) => {
 
+
+    
     const ai = new GoogleGenAI({
         apiKey: process.env.API_KEY,
     });
@@ -16,44 +18,67 @@ const explainError = async (error, language) => {
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `
-        You are a senior software engineer and debugging expert helping developers fix errors quickly and learn from them.
+            contents:  `
+                    You are a senior software engineer and debugging expert.
 
-        Language/Framework: ${language}
+                    Your task is to analyze a real error and provide a FIX-FIRST response.
 
-        Error Message:
-        ${error}
+                    Language/Framework: ${language}
 
-        Code Context (where the error occurred):
-      Not provided
+                    Error Message:
+                    ${error}
 
-        Please provide a detailed explanation of this error in the following JSON format:
+                    Code Context:
+                   Try to find the code if it is given to you take the refernce of the code i 
+                    - Since no code is provided, generate a realistic example that causes this error and fix it.
 
-        Return ONLY valid JSON. No markdown. No extra text outside JSON.
+                    IMPORTANT:
+                    - You MUST prioritize fixing the error over explaining it.
+                    - If code is provided, you MUST return a corrected, working version.
+                    - Do NOT give generic advice. Be specific to the given error and code.
+                    - If multiple fixes are possible, choose the most practical one.
 
-        {
-            "errorType": "string (e.g. TypeError, SyntaxError, RuntimeError)",
-            "severity": "string (critical | warning | info)",
-            "explanation": "string (simple 2-3 sentence explanation for beginners)",
-            "rootCause": "string (technical reason why this error occurred)",
-            "fixSteps": [
-                {
-                    "step": "string (what to do)",
-                    "code": "string (actual code example for this step, empty string if not applicable)"
-                }
-            ],
-            "correctedCode": "string (the full corrected version of the user's code if code was provided, otherwise empty string)",
-            "commonMistakes": ["string (other common mistakes related to this error)"],
-            "learningTip": "string (one key concept to learn to avoid this in future)",
-            "relatedErrors": ["string (similar errors they might encounter)"]
-        }
+                    Return ONLY valid JSON. No markdown. No extra text.
 
-        Rules:
-        - Be specific to the actual code provided, not generic
-        - correctedCode must be the actual fixed version of their code
-        - Keep explanation beginner friendly but fixSteps can be technical
-        - If no code is provided, make fixSteps as specific as possible to the error
-    `
+                    {
+                    "errorType": "string",
+                    "severity": "critical | warning | info",
+
+                    "explanation": "Explain in 1-2 simple sentences what went wrong",
+
+                    "rootCause": "Exact technical reason of failure",
+
+                    "fixSteps": [
+                        {
+                        "step": "Clear actionable step",
+                        "code": "Working code snippet for this step (must not be empty if fix involves code)"
+                        }
+                    ],
+
+                    "correctedCode": "FULL corrected code. MUST be complete and runnable if code was provided. If not possible, return best possible fix snippet instead of empty string.",
+
+                    "codeDiff": [
+                        {
+                        "before": "buggy line",
+                        "after": "fixed line"
+                        }
+                    ],
+
+                    "commonMistakes": [
+                        "Closely related real mistakes developers make"
+                    ],
+
+                    "learningTip": "One core concept to understand to avoid this error",
+
+                    "confidence": "high | medium | low"
+                    }
+
+                    STRICT RULES:
+                    - NEVER return empty correctedCode if code is provided
+                    - Code must be syntactically correct and realistic
+                    - Avoid placeholders like 'yourVariable'
+                    - Keep explanation short, focus on fix
+                    `
         });
         // console.log(response.text);
 
