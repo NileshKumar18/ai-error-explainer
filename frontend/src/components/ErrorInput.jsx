@@ -1,13 +1,37 @@
 import React, { useState } from 'react';
+import {explainError, pollResult} from '../api/ai.api.js';
 
 export default function ErrorInput({ onSend }) {
+  const [result , setResult] = useState(null)
   const [input, setInput] = useState('');
+  const [language , setLanguage] = useState("")
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!input.trim()) return;
-    onSend(input);
+
+    try {
+      const res =  await explainError(input , language )
+    const jobId = res.jobId
+
+    // console.log("Job id" , jobId);
+    
+    if(jobId){
+      const answer = pollResult(jobId)
+      setResult(answer)
+    }else{
+      setResult(res.data)
+    }
+    // console.log(result);
+    
+   
     setInput('');
+    } catch (err) {
+       console.error(err)
+    }
   };
+
+  
+  
 
   return (
     <div className="sticky bottom-6 w-full max-w-2xl mx-auto px-4">
